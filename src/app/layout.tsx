@@ -1,11 +1,12 @@
 import "./globals.css";
 import { Inter } from "next/font/google";
 import Link from "next/link";
+import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Postman-like UI",
+  title: "Make Request",
   description: "A simple Postman-like UI built with React",
 };
 
@@ -18,7 +19,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <nav className="bg-gray-800 text-white p-4">
-          <div className="container mx-auto flex justify-between">
+          <div className="container-fluid mx-auto flex justify-between">
             <Link href="/" className="text-xl font-bold">
               MAKE REQUEST
             </Link>
@@ -33,6 +34,7 @@ export default function RootLayout({
           </div>
         </nav>
         {children}
+        <Toaster />
       </body>
     </html>
   );
