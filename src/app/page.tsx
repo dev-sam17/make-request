@@ -88,7 +88,6 @@ function NoSSRPostmanClone() {
 
       console.log(typeof requestBody);
       console.log(requestBody);
-      console.log(JSON.parse(requestBody));
       console.log(requestType);
 
       const startTime = Date.now();
