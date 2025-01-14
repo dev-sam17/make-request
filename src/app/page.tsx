@@ -95,9 +95,25 @@ function NoSSRPostmanClone() {
       const res = await fetch(fullUrl, options);
       const endTime = Date.now();
 
-      const responseData = await res.text();
-      // setResponse(formatJSON(JSON.stringify(responseData)));
+      let responseData = await res.text();
+
+      // try {
+      if (responseData.includes("//BOUNDRY//")) {
+        responseData = responseData
+          .split("//BOUNDRY//")
+          .filter((x) => !!x)
+          .map((x) => formatJSON(x))
+          .join("\n\n");
+      }
+
       setResponse(responseData);
+
+      // setResponse(formatJSON(responseData));
+      // } catch (error) {
+      // console.log("err");
+
+      // setResponse(responseData);
+      // }
 
       setResponseInfo({
         status: res.status,
