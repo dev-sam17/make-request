@@ -158,7 +158,7 @@ function NoSSRPostmanClone() {
 
       <div className="flex space-x-4">
         <Select value={requestType} onValueChange={setRequestType}>
-          <SelectTrigger className="w-[180px]">
+          <SelectTrigger className="w-[100px]">
             <SelectValue
               placeholder="Select request type"
               defaultValue={requestType}
@@ -173,7 +173,7 @@ function NoSSRPostmanClone() {
           </SelectContent>
         </Select>
         <Select value={baseUrl} onValueChange={(value) => setBaseUrl(value)}>
-          <SelectTrigger className="w-[300px]">
+          <SelectTrigger className="w-[500px]">
             <SelectValue placeholder="Select base URL" />
           </SelectTrigger>
           <SelectContent>
