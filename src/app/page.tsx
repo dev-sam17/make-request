@@ -15,16 +15,35 @@ const requestTypes = ["GET", "POST", "PUT", "DELETE", "PATCH"];
 
 function NoSSRPostmanClone() {
   const [requestType, setRequestType] = useState(requestTypes[1]);
-  const [baseUrl, setBaseUrl] = useState("");
-  const [urlPath, setUrlPath] = useState("");
-  const [requestBody, setRequestBody] = useState(
-    localStorage.getItem("requestBody") || ""
+  const [baseUrl, setBaseUrl_1] = useState(
+    localStorage.getItem("current_baseurl") || ""
+  );
+  const [urlPath, setUrlPath_1] = useState(
+    localStorage.getItem("current_urlPath") || ""
+  );
+  const [requestBody, setRequestBody_1] = useState(
+    localStorage.getItem("current_requestBody") || ""
   );
   const [response, setResponse] = useState("");
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [responseInfo, setResponseInfo] = useState<any>({});
   const [baseUrls, setBaseUrls] = useState<string[]>([]);
   const [urlPaths, setUrlPaths] = useState<string[]>([]);
+
+  const setBaseUrl = (v: string) => {
+    setBaseUrl_1(v);
+    localStorage.setItem("current_baseurl", v);
+  };
+
+  const setUrlPath = (v: string) => {
+    setUrlPath_1(v);
+    localStorage.setItem("current_urlPath", v);
+  };
+
+  const setRequestBody = (v: string) => {
+    setRequestBody_1(v);
+    localStorage.setItem("current_requestBody", v);
+  };
 
   useEffect(() => {
     const storedBaseUrls = JSON.parse(localStorage.getItem("baseUrls") || "[]");
@@ -47,7 +66,6 @@ function NoSSRPostmanClone() {
   ) => {
     const formatted = formatJSON(e.target.value);
     setRequestBody(formatted);
-    localStorage.setItem("requestBody", formatted);
   };
 
   const sendRequest = async () => {
@@ -98,7 +116,7 @@ function NoSSRPostmanClone() {
 
   return (
     <div className="container mx-auto p-4 space-y-4">
-      <h1 className="text-2xl font-bold mb-4">MAKE REQUEST</h1>
+      {/* <h1 className="text-2xl font-bold mb-4">MAKE REQUEST</h1> */}
       <div className="flex space-x-4">
         <Select value={requestType} onValueChange={setRequestType}>
           <SelectTrigger className="w-[180px]">
@@ -115,7 +133,7 @@ function NoSSRPostmanClone() {
             ))}
           </SelectContent>
         </Select>
-        <Select onValueChange={(value) => setBaseUrl(value)}>
+        <Select value={baseUrl} onValueChange={(value) => setBaseUrl(value)}>
           <SelectTrigger className="w-[300px]">
             <SelectValue placeholder="Select base URL" />
           </SelectTrigger>
@@ -127,7 +145,7 @@ function NoSSRPostmanClone() {
             ))}
           </SelectContent>
         </Select>
-        <Select onValueChange={(value) => setUrlPath(value)}>
+        <Select value={urlPath} onValueChange={(value) => setUrlPath(value)}>
           <SelectTrigger className="w-[300px]">
             <SelectValue placeholder="Select URL path" />
           </SelectTrigger>
