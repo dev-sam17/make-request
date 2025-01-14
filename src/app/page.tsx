@@ -1,5 +1,5 @@
 "use client";
-
+import dynamic from "next/dynamic";
 import { useState, useEffect } from "react";
 import {
   Select,
@@ -13,7 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 
 const requestTypes = ["GET", "POST", "PUT", "DELETE", "PATCH"];
 
-export default function PostmanClone() {
+function NoSSRPostmanClone() {
   const [requestType, setRequestType] = useState(requestTypes[1]);
   const [baseUrl, setBaseUrl] = useState("");
   const [urlPath, setUrlPath] = useState("");
@@ -21,6 +21,7 @@ export default function PostmanClone() {
     localStorage.getItem("requestBody") || ""
   );
   const [response, setResponse] = useState("");
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [responseInfo, setResponseInfo] = useState<any>({});
   const [baseUrls, setBaseUrls] = useState<string[]>([]);
   const [urlPaths, setUrlPaths] = useState<string[]>([]);
@@ -36,6 +37,7 @@ export default function PostmanClone() {
     try {
       return JSON.stringify(JSON.parse(json), null, 2);
     } catch (e) {
+      console.log(e);
       return json;
     }
   };
@@ -150,7 +152,7 @@ export default function PostmanClone() {
         <h2 className="text-xl font-semibold mb-2">Response</h2>
         <div className="bg-gray-100 p-2 rounded mb-2">
           <p>
-            Status: {responseInfo.status} {responseInfo.statusText}
+            Status: {responseInfo?.status} {responseInfo.statusText}
           </p>
           <p>Time: {responseInfo.time}</p>
           <p>Size: {responseInfo.size}</p>
@@ -162,3 +164,9 @@ export default function PostmanClone() {
     </div>
   );
 }
+
+const PostmanClone = dynamic(() => Promise.resolve(NoSSRPostmanClone), {
+  ssr: false,
+});
+
+export default PostmanClone;
