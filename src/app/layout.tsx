@@ -3,7 +3,11 @@ import { Inter } from "next/font/google";
 import Link from "next/link";
 import { Toaster } from "@/components/ui/sonner";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({
+  subsets: ["latin"],
+  fallback: ["Arial", "sans-serif"],
+});
+
 
 export const metadata = {
   title: "Make Request",
