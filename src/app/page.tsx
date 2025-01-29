@@ -17,7 +17,7 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion"
+} from "@/components/ui/accordion";
 
 interface CustomError {
   status: number;
@@ -31,7 +31,7 @@ type ResponseInfoType = {
   statusText: string;
   time: number;
   size: number;
-}
+};
 
 const requestTypes = ["GET", "POST", "PUT", "DELETE", "PATCH"];
 
@@ -52,7 +52,7 @@ function NoSSRPostmanClone() {
   const [baseUrls, setBaseUrls] = useState<string[]>([]);
   const [urlPaths, setUrlPaths] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState("")
+  const [error, setError] = useState("");
 
   const setBaseUrl = (v: string) => {
     setBaseUrl_1(v);
@@ -127,16 +127,16 @@ function NoSSRPostmanClone() {
         throw errorDetails;
       }
 
-      const resJson = await res.text()
+      const resJson = await res.text();
 
-      let responseData = []
+      let responseData = [];
       setLoading(false);
 
       if (resJson.includes("//BOUNDRY//")) {
         responseData = resJson
           .split("//BOUNDRY//")
           .filter((x: string) => !!x)
-          .map((x: string) => formatJSON(x))
+          .map((x: string) => formatJSON(x));
       } else {
         responseData.push(formatJSON(resJson));
       }
@@ -153,7 +153,12 @@ function NoSSRPostmanClone() {
       setLoading(false);
       setResponse([]);
       setResponseInfo("");
-      if (typeof error === "object" && error !== null && "status" in error && "statusText" in error) {
+      if (
+        typeof error === "object" &&
+        error !== null &&
+        "status" in error &&
+        "statusText" in error
+      ) {
         const customError = error as CustomError;
         setResponseInfo({
           status: customError.status,
@@ -162,11 +167,17 @@ function NoSSRPostmanClone() {
           size: customError.size || "Unknown",
         });
         setError(
-          JSON.stringify({ error: "An error occurred while fetching data", message: customError })
+          JSON.stringify({
+            error: "An error occurred while fetching data",
+            message: customError,
+          })
         );
       } else {
         setError(
-          JSON.stringify({ error: "An unknown error occurred", message: String(error) })
+          JSON.stringify({
+            error: "An unknown error occurred",
+            message: String(error),
+          })
         );
       }
     }
@@ -177,7 +188,7 @@ function NoSSRPostmanClone() {
       description: "Response copied to Clipboard",
       action: {
         label: "Done",
-        onClick: () => { },
+        onClick: () => {},
       },
     });
   }
@@ -197,8 +208,9 @@ function NoSSRPostmanClone() {
     <div className="container mx-auto p-4 space-y-4">
       <Spinner
         size="lg"
-        className={`bg-blue-500 dark:bg-blue-300 absolute inset-0 m-auto ${loading ? "visible" : "invisible"
-          }`}
+        className={`bg-blue-500 dark:bg-blue-300 absolute inset-0 m-auto ${
+          loading ? "visible" : "invisible"
+        }`}
       />
 
       <div className="flex space-x-4">
@@ -253,16 +265,40 @@ function NoSSRPostmanClone() {
 
       <div className="mt-4">
         <h2 className="text-xl font-semibold mb-2">Response</h2>
-        {(!!response.length || !!error) && <div className="bg-gray-100 p-2 rounded mb-2 flex flex-row-reverse">
-          <span className="ml-2">
-            <strong>Status:</strong> <span className={`${((responseInfo as ResponseInfoType).status > 399) ? "text-red-500" : "text-green-500"}`}>{(responseInfo as ResponseInfoType)?.status} {(responseInfo as ResponseInfoType).statusText}</span>
-          </span>
-          <span className="ml-2"><strong>Time:</strong> <span className="text-green-500">{(responseInfo as ResponseInfoType).time}ms</span></span>
-          <span className="ml-2"><strong>Size:</strong> <span className="text-green-500">{(responseInfo as ResponseInfoType).size}bytes</span></span>
-        </div>}
-        {!!error && <pre className="bg-gray-100 p-4 rounded overflow-x-auto">
-          <code>{error}</code>
-        </pre>}
+        {(!!response.length || !!error) && (
+          <div className="bg-gray-100 p-2 rounded mb-2 flex flex-row-reverse">
+            <span className="ml-2">
+              <strong>Status:</strong>{" "}
+              <span
+                className={`${
+                  (responseInfo as ResponseInfoType).status > 399
+                    ? "text-red-500"
+                    : "text-green-500"
+                }`}
+              >
+                {(responseInfo as ResponseInfoType)?.status}{" "}
+                {(responseInfo as ResponseInfoType).statusText}
+              </span>
+            </span>
+            <span className="ml-2">
+              <strong>Time:</strong>{" "}
+              <span className="text-green-500">
+                {(responseInfo as ResponseInfoType).time}ms
+              </span>
+            </span>
+            <span className="ml-2">
+              <strong>Size:</strong>{" "}
+              <span className="text-green-500">
+                {(responseInfo as ResponseInfoType).size}bytes
+              </span>
+            </span>
+          </div>
+        )}
+        {!!error && (
+          <pre className="bg-gray-100 p-4 rounded overflow-x-auto">
+            <code>{error}</code>
+          </pre>
+        )}
         <Accordion type="single" collapsible>
           {(response as string[]).map((res, i) => {
             return (
@@ -298,7 +334,7 @@ function NoSSRPostmanClone() {
                   </div>
                 </AccordionContent>
               </AccordionItem>
-            )
+            );
           })}
         </Accordion>
       </div>

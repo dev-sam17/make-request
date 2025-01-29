@@ -8,7 +8,6 @@ const inter = Inter({
   fallback: ["Arial", "sans-serif"],
 });
 
-
 export const metadata = {
   title: "Make Request",
   description: "A simple Postman-like UI built with React",
@@ -33,6 +32,9 @@ export default function RootLayout({
               </Link>
               <Link href="/manage-urls" className="hover:text-gray-300">
                 Manage URLs
+              </Link>
+              <Link href="/formatter" className="hover:text-gray-300">
+                Format JSON
               </Link>
             </div>
           </div>
