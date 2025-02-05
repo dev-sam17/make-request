@@ -9,11 +9,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 // import { toast } from "sonner";
 import { Spinner } from "@/components/ui/spinner";
 import JsonView from "react18-json-view";
 import "react18-json-view/src/style.css";
+import { Popup } from "@/components/ui/popup";
 
 interface CustomError {
   status: number;
@@ -29,6 +29,14 @@ type ResponseInfoType = {
   size: number;
 };
 
+function safeParse(str = "") {
+  try {
+    return JSON.parse(str);
+  } catch (error) {
+    console.log(error);
+    return {};
+  }
+}
 const requestTypes = ["GET", "POST", "PUT", "DELETE", "PATCH"];
 
 function NoSSRPostmanClone() {
@@ -49,6 +57,7 @@ function NoSSRPostmanClone() {
   const [urlPaths, setUrlPaths] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState("");
+  const [clipboard, setClipboard] = useState("");
 
   const setBaseUrl = (v: string) => {
     setBaseUrl_1(v);
@@ -81,10 +90,9 @@ function NoSSRPostmanClone() {
     }
   };
 
-  const handleRequestBodyChange = (
-    e: React.ChangeEvent<HTMLTextAreaElement>
-  ) => {
-    const formatted = formatJSON(e.target.value);
+  const handleRequestBodyChange = (str: string) => {
+    const formatted = formatJSON(str);
+    // setClipboard(formatted);
     setRequestBody(formatted);
   };
 
@@ -250,14 +258,19 @@ function NoSSRPostmanClone() {
             ))}
           </SelectContent>
         </Select>
+        <Popup
+          clipboard={clipboard}
+          handleRequestBodyChange={handleRequestBodyChange}
+          setClipboard={setClipboard}
+        />
         <Button onClick={sendRequest}>Send Request</Button>
       </div>
-      <Textarea
-        placeholder="Enter request body (JSON)"
-        value={requestBody}
-        onChange={handleRequestBodyChange}
-        className="font-mono"
-        rows={10}
+
+      <JsonView
+        src={safeParse(requestBody)}
+        editable={{ add: true, edit: true, delete: true }}
+        onChange={(e) => setRequestBody(JSON.stringify(e.src))}
+        onDelete={() => setRequestBody(JSON.stringify({}))}
       />
 
       <div className="mt-4">

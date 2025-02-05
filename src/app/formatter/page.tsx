@@ -1,7 +1,9 @@
 "use client";
 import { useState } from "react";
 
-// import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+
 // import { toast } from "sonner";
 import JsonView from "react18-json-view";
 import "react18-json-view/src/style.css";
@@ -42,25 +44,26 @@ export default function JsonFormatter() {
   };
 
   return (
-    <div className="container-fluid mx-auto p-4 bg-gray-100 rounded-xl shadow-lg">
+    <div className="container mx-auto p-4 space-y-4">
       <h2 className="text-xl font-bold mb-3">JSON Formatter</h2>
 
       {/* Input Field */}
-      <textarea
-        className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+      <Textarea
+        className="w-full p-2 border rounded-md focus:outline-none focus:ring-2"
         rows={5}
         placeholder="Enter JSON text here..."
         value={input}
         onChange={(e) => setInput(e.target.value)}
       />
 
-      {/* Format Button */}
-      <button
+      
+
+      <Button
         onClick={() => handleFormatJson()}
-        className="mt-3 w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+        className="mt-3 text-white px-4 py-2 rounded-md hover:bg-blue-700"
       >
         Format JSON
-      </button>
+      </Button>
 
       {/* Error Message */}
       {error && <p className="text-red-500 mt-2">{error}</p>}
@@ -110,7 +113,6 @@ export default function JsonFormatter() {
           console.log(JSON.parse(res));
           return (
             <div key={i} className="my-7">
-              
               <JsonView src={JSON.parse(res)} />
             </div>
           );
