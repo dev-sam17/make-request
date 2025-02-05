@@ -1,13 +1,9 @@
 "use client";
 import { useState } from "react";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
+
+// import { Button } from "@/components/ui/button";
+// import { toast } from "sonner";
+import ReactJson from "react-json-view";
 
 export default function JsonFormatter() {
   const [input, setInput] = useState("");
@@ -44,29 +40,8 @@ export default function JsonFormatter() {
     }
   };
 
-  function notify() {
-    toast("Copied !!", {
-      description: "Response copied to Clipboard",
-      action: {
-        label: "Done",
-        onClick: () => {},
-      },
-    });
-  }
-
-  const copyText = (text: string) => {
-    navigator.clipboard
-      .writeText(text)
-      .then(() => {
-        notify();
-      })
-      .catch((err) => {
-        console.error("Failed to copy text: ", err);
-      });
-  };
-
   return (
-    <div className="max-w-xl mx-auto p-4 bg-gray-100 rounded-xl shadow-lg">
+    <div className="container-fluid mx-auto p-4 bg-gray-100 rounded-xl shadow-lg">
       <h2 className="text-xl font-bold mb-3">JSON Formatter</h2>
 
       {/* Input Field */}
@@ -90,7 +65,7 @@ export default function JsonFormatter() {
       {error && <p className="text-red-500 mt-2">{error}</p>}
 
       {/* Formatted JSON Output */}
-      <Accordion type="single" collapsible>
+      {/* <Accordion type="single" collapsible>
         {(response as string[]).map((res, i) => {
           return (
             <AccordionItem value="item-1" key={i}>
@@ -127,7 +102,17 @@ export default function JsonFormatter() {
             </AccordionItem>
           );
         })}
-      </Accordion>
+      </Accordion> */}
+      {Array.isArray(response) &&
+        response.map((res, i) => {
+          // return res;
+          console.log(JSON.parse(res));
+          return (
+            <div key={i} className="my-4">
+              <ReactJson src={JSON.parse(res)} />
+            </div>
+          );
+        })}
     </div>
   );
 }
