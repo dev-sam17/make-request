@@ -12,12 +12,8 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { Spinner } from "@/components/ui/spinner";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+import JsonView from "react18-json-view";
+import "react18-json-view/src/style.css";
 
 interface CustomError {
   status: number;
@@ -93,6 +89,7 @@ function NoSSRPostmanClone() {
   };
 
   const sendRequest = async () => {
+    setError("");
     let fullUrl;
     try {
       if (baseUrl.startsWith("localhost")) {
@@ -299,7 +296,7 @@ function NoSSRPostmanClone() {
             <code>{error}</code>
           </pre>
         )}
-        <Accordion type="single" collapsible>
+        {/* <Accordion type="single" collapsible>
           {(response as string[]).map((res, i) => {
             return (
               <AccordionItem value="item-1" key={i}>
@@ -336,7 +333,17 @@ function NoSSRPostmanClone() {
               </AccordionItem>
             );
           })}
-        </Accordion>
+        </Accordion> */}
+        {Array.isArray(response) &&
+          response.map((res, i) => {
+            // return res;
+            console.log(JSON.parse(res));
+            return (
+              <div key={i} className="my-7">
+                <JsonView src={JSON.parse(res)} />
+              </div>
+            );
+          })}
       </div>
     </div>
   );
