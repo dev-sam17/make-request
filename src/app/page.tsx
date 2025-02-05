@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { toast } from "sonner";
+// import { toast } from "sonner";
 import { Spinner } from "@/components/ui/spinner";
 import JsonView from "react18-json-view";
 import "react18-json-view/src/style.css";
@@ -180,26 +180,26 @@ function NoSSRPostmanClone() {
     }
   };
 
-  function notify() {
-    toast("Copied !!", {
-      description: "Response copied to Clipboard",
-      action: {
-        label: "Done",
-        onClick: () => {},
-      },
-    });
-  }
+  // function notify() {
+  //   toast("Copied !!", {
+  //     description: "Response copied to Clipboard",
+  //     action: {
+  //       label: "Done",
+  //       onClick: () => {},
+  //     },
+  //   });
+  // }
 
-  const copyText = (text: string) => {
-    navigator.clipboard
-      .writeText(text)
-      .then(() => {
-        notify();
-      })
-      .catch((err) => {
-        console.error("Failed to copy text: ", err);
-      });
-  };
+  // const copyText = (text: string) => {
+  //   navigator.clipboard
+  //     .writeText(text)
+  //     .then(() => {
+  //       notify();
+  //     })
+  //     .catch((err) => {
+  //       console.error("Failed to copy text: ", err);
+  //     });
+  // };
 
   return (
     <div className="container mx-auto p-4 space-y-4">
