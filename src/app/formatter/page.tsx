@@ -3,7 +3,8 @@ import { useState } from "react";
 
 // import { Button } from "@/components/ui/button";
 // import { toast } from "sonner";
-import ReactJson from "react-json-view";
+import JsonView from 'react18-json-view'
+import 'react18-json-view/src/style.css'
 
 export default function JsonFormatter() {
   const [input, setInput] = useState("");
@@ -109,7 +110,7 @@ export default function JsonFormatter() {
           console.log(JSON.parse(res));
           return (
             <div key={i} className="my-4">
-              <ReactJson src={JSON.parse(res)} />
+              <JsonView src={JSON.parse(res)} />
             </div>
           );
         })}
