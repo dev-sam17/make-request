@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -9,11 +9,30 @@ import JsonView from "react18-json-view";
 import "react18-json-view/src/style.css";
 
 export default function JsonFormatter() {
-  const [input, setInput] = useState("");
+  const [input, setInput11] = useState("");
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [formattedJson, setFormattedJson] = useState<string | null>(null);
   const [error, setError] = useState("");
   const [response, setResponse] = useState<string[] | string>([]);
+
+  const setInput = (value: string) => {
+    localStorage.setItem("json", value);
+    setInput11(value);
+    handleFormatJson();
+  };
+
+  useEffect(() => {
+    setInput(localStorage.getItem("json") || "");
+  }, []);
+
+  function safeParse(str = "") {
+    try {
+      return JSON.parse(str);
+    } catch (error) {
+      console.log(error);
+      return {};
+    }
+  }
 
   const formatJSON = (json: string) => {
     try {
@@ -55,8 +74,6 @@ export default function JsonFormatter() {
         value={input}
         onChange={(e) => setInput(e.target.value)}
       />
-
-      
 
       <Button
         onClick={() => handleFormatJson()}
@@ -110,10 +127,10 @@ export default function JsonFormatter() {
       {Array.isArray(response) &&
         response.map((res, i) => {
           // return res;
-          console.log(JSON.parse(res));
+          console.log(safeParse(res));
           return (
             <div key={i} className="my-7">
-              <JsonView src={JSON.parse(res)} />
+              <JsonView src={safeParse(res)} />
             </div>
           );
         })}
