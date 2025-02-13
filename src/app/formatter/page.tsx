@@ -36,9 +36,11 @@ export default function JsonFormatter() {
 
   const formatJSON = (json: string) => {
     try {
+      setError("");
       return JSON.stringify(JSON.parse(json), null, 2);
     } catch (e) {
       console.log(e);
+      setError("Invalid JSON");
       return json;
     }
   };
