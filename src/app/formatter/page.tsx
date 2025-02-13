@@ -18,7 +18,7 @@ export default function JsonFormatter() {
   const setInput = (value: string) => {
     localStorage.setItem("json", value);
     setInput11(value);
-    handleFormatJson();
+    handleFormatJson(value);
   };
 
   useEffect(() => {
@@ -44,16 +44,17 @@ export default function JsonFormatter() {
   };
 
   let responseData: string[] = [];
-  const handleFormatJson = () => {
+  const handleFormatJson = (str: string) => {
     try {
-      if (input.includes("//BOUNDRY//")) {
-        responseData = input
+      if (str.includes("//BOUNDRY//")) {
+        responseData = str
           .split("//BOUNDRY//")
           .filter((x: string) => !!x)
           .map((x: string) => formatJSON(x));
       } else {
-        responseData.push(formatJSON(input));
+        responseData.push(formatJSON(str));
       }
+      setError("");
       setResponse(responseData);
     } catch (err) {
       console.log(err);
@@ -76,7 +77,7 @@ export default function JsonFormatter() {
       />
 
       <Button
-        onClick={() => handleFormatJson()}
+        onClick={() => handleFormatJson(input)}
         className="mt-3 text-white px-4 py-2 rounded-md hover:bg-blue-700"
       >
         Format JSON
@@ -127,7 +128,6 @@ export default function JsonFormatter() {
       {Array.isArray(response) &&
         response.map((res, i) => {
           // return res;
-          console.log(safeParse(res));
           return (
             <div key={i} className="my-7">
               <JsonView src={safeParse(res)} />
