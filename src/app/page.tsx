@@ -14,7 +14,7 @@ import { Spinner } from "@/components/ui/spinner";
 import JsonView from "react18-json-view";
 import "react18-json-view/src/style.css";
 import { Popup } from "@/components/ui/popup";
-
+import { parseCurlCommand } from "@/lib/curlParser";
 interface CustomError {
   status: number;
   statusText: string;
@@ -188,6 +188,11 @@ function NoSSRPostmanClone() {
     }
   };
 
+  const parseCurlAndAddRequest = (curlText: string) => {
+    const curlParser = parseCurlCommand(curlText);
+    console.log(curlParser);
+  };
+
   // function notify() {
   //   toast("Copied !!", {
   //     description: "Response copied to Clipboard",
@@ -259,8 +264,24 @@ function NoSSRPostmanClone() {
           </SelectContent>
         </Select>
         <Popup
+          data={{
+            button: "Import",
+            title: "Add Curl Body",
+            placeholder: "Enter curl body",
+          }}
           clipboard={clipboard}
-          handleRequestBodyChange={handleRequestBodyChange}
+          fn={parseCurlAndAddRequest}
+          setClipboard={setClipboard}
+        />
+
+        <Popup
+          data={{
+            button: "Edit",
+            title: "Add JSON Body",
+            placeholder: "Enter request body (JSON)",
+          }}
+          clipboard={clipboard}
+          fn={handleRequestBodyChange}
           setClipboard={setClipboard}
         />
         <Button onClick={sendRequest}>Send Request</Button>
