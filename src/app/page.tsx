@@ -40,7 +40,7 @@ function safeParse(str = "") {
 const requestTypes = ["GET", "POST", "PUT", "DELETE", "PATCH"];
 
 function NoSSRPostmanClone() {
-  const [requestType, setRequestType] = useState(requestTypes[1]);
+  const [requestType, setRequestType] = useState<string>(requestTypes[1]);
   const [baseUrl, setBaseUrl_1] = useState(
     localStorage.getItem("current_baseurl") || ""
   );
@@ -190,7 +190,18 @@ function NoSSRPostmanClone() {
 
   const parseCurlAndAddRequest = (curlText: string) => {
     const curlParser = parseCurlCommand(curlText);
-    console.log(curlParser);
+    setRequestType(requestTypes[requestTypes.indexOf(curlParser.method)]);
+    setBaseUrl(curlParser.baseUrl);
+    localStorage.setItem(
+      "baseUrls",
+      JSON.stringify([...baseUrls, curlParser.baseUrl])
+    );
+    setUrlPath(curlParser.urlPath);
+    localStorage.setItem(
+      "urlPaths",
+      JSON.stringify([...urlPaths, curlParser.urlPath])
+    );
+    setRequestBody(JSON.stringify(curlParser.body));
   };
 
   // function notify() {
@@ -244,20 +255,20 @@ function NoSSRPostmanClone() {
             <SelectValue placeholder="Select base URL" />
           </SelectTrigger>
           <SelectContent>
-            {baseUrls.map((url) => (
-              <SelectItem key={url} value={url}>
+            {baseUrls.map((url, i) => (
+              <SelectItem key={i} value={url}>
                 {url}
               </SelectItem>
             ))}
           </SelectContent>
         </Select>
         <Select value={urlPath} onValueChange={(value) => setUrlPath(value)}>
-          <SelectTrigger className="w-[300px]">
+          <SelectTrigger className="w-[300px] overflow-hidden">
             <SelectValue placeholder="Select URL path" />
           </SelectTrigger>
           <SelectContent>
-            {urlPaths.map((path) => (
-              <SelectItem key={path} value={path}>
+            {urlPaths.map((path, i) => (
+              <SelectItem key={i} value={path}>
                 {path}
               </SelectItem>
             ))}

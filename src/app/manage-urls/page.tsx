@@ -62,9 +62,9 @@ export default function ManageUrls() {
           <Button onClick={addBaseUrl}>Add</Button>
         </div>
         <ul className="space-y-2">
-          {baseUrls.map((url) => (
+          {baseUrls.map((url, i) => (
             <li
-              key={url}
+              key={i}
               className="flex justify-between items-center bg-gray-100 p-2 rounded"
             >
               <span>{url}</span>
@@ -91,9 +91,9 @@ export default function ManageUrls() {
           <Button onClick={addUrlPath}>Add</Button>
         </div>
         <ul className="space-y-2">
-          {urlPaths.map((path) => (
+          {urlPaths.map((path, i) => (
             <li
-              key={path}
+              key={i}
               className="flex justify-between items-center bg-gray-100 p-2 rounded"
             >
               <span>{path}</span>

@@ -1,6 +1,6 @@
 type ParsedCurl = {
     method: string;
-    body?: Record<string, any> | string;
+    body?: Record<string, unknown> | string;
     headers: Record<string, string>;
     baseUrl: string;
     urlPath: string;
@@ -22,19 +22,21 @@ export function parseCurlCommand(curlCommand: string): ParsedCurl {
     // Normalize multi-line command
     curlCommand = curlCommand.replace(/\\\s*\n/g, " ").trim();
 
-    const urlRegex = /curl\s+['"]?(https?:\/\/[^\s'"]+)['"]?/i;
-    const headerRegex = /-H\s+['"]?([^:]+):\s*([^'"]+)['"]?/gi;
-    const methodRegex = /-X\s+(\w+)/i;
-    const dataRawRegex = /--data-raw\s+['`]([^'`]+)['`]/i;  // Supports both ' and ` quotes
+    const urlRegex = /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/ig
+    const headerRegex = /--header\s+['"]?([^:]+):\s*([^'"]+)['"]?/gi;
+    const methodRegex = /--request\s+(\w+)/i;
+    const dataRawRegex = /--data-raw\s+['`]([^'`]+)['`]/i;
     const dataUrlEncodeRegex = /--data-urlencode\s+['"]?([^=]+)=([^'"]+)['"]?/gi;
     const authRegex = /-u\s+['"]?([^:]+:[^'"]+)['"]?/i;
 
     // URL Parsing
     const urlMatch = curlCommand.match(urlRegex);
     if (urlMatch) {
-        const url = new URL(urlMatch[1]);
+        const url = new URL(urlMatch[0]);
         result.baseUrl = `${url.protocol}//${url.host}`;
         result.urlPath = url.pathname + url.search;
+    } else {
+        console.log("No URL found in the curl command.");
     }
 
     // HTTP Method Parsing
@@ -58,6 +60,7 @@ export function parseCurlCommand(curlCommand: string): ParsedCurl {
         } catch (error) {
             console.warn("Failed to parse JSON body:", error);
             result.body = dataRawMatch[1]; // Return the raw body as a fallback
+            console.log("Fallback to raw body:", result.body);
         }
     }
 
@@ -69,12 +72,14 @@ export function parseCurlCommand(curlCommand: string): ParsedCurl {
     }
     if (Object.keys(urlEncodedBody).length > 0) {
         result.body = urlEncodedBody;
+        console.log("Final URL-encoded body:", result.body);
     }
 
     // Basic Auth Parsing
     const authMatch = curlCommand.match(authRegex);
     if (authMatch) {
         result.auth = authMatch[1];
+        console.log("Parsed auth:", result.auth);
     }
 
     // Handle flags like --compressed and --insecure
